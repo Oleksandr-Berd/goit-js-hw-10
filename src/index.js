@@ -54,6 +54,11 @@ function onSearch(evt) {
   evt.preventDefault();
   const countryDraft = evt.target.value;
   const countryName = countryDraft.trim();
+  console.log(countryName.length);
+  if (countryName.length === 0) {
+    refs.countryInfo.innerHTML = '';
+    return;
+  }
   API.fetchCountry(countryName).then(renderCountryCard).catch(onFetchError);
 }
 
