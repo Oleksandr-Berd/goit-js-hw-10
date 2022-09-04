@@ -11,9 +11,7 @@ const refs = {
 };
 
 function renderCountryCard(country) {
-  console.log(country.length);
-
-  if (country.length > 1) {
+  if (country.length > 1 && country.length < 10) {
     const markUp = country
       .map(el => {
         return `<div class="country_card">
@@ -34,15 +32,16 @@ function renderCountryCard(country) {
         <h2 class = "name">Name: ${el.name}</h2>
         <p class= "population">Population: ${el.population}</p>
         <p class = "capital">Capital: ${el.capital}</p>
-        <p class = "language">Language: ${Object.values(el.languages).join(
+        <p class = "language">Language: ${Object.values(el.languages[0]).join(
           ', '
         )}</p>
         </div>`;
       })
       .join('');
+
     refs.countryInfo.insertAdjacentHTML('afterbegin', markUp);
   }
-  if (country.lenght > 10) {
+  if (country.length >= 10) {
     Notiflix.Notify.info(
       'Too many matches found. Please enter a more specific name.'
     );
