@@ -11,12 +11,26 @@ const refs = {
 };
 
 function renderCountryCard(country) {
-  const markUp = country
-    .map(el => {
-      return `<div class="country_card">
+  console.log(country.length);
+
+  if (country.length > 1) {
+    const markUp = country
+      .map(el => {
+        return `<div class="country_card">
+        <img class="flag" src="${el.flags.svg}" alt ="${el.name}" width = "100" height = "80"></>
+        <h2 class = "name">Name: ${el.name}</h2>
+        </div>`;
+      })
+      .join('');
+    refs.countryInfo.insertAdjacentHTML('afterbegin', markUp);
+  }
+  if (country.length === 1) {
+    const markUp = country
+      .map(el => {
+        return `<div class="country_card">
         <img class="flag" src="${el.flags.svg}" alt ="${
-        el.name
-      }" width = "100" height = "80"></>
+          el.name
+        }" width = "100" height = "80"></>
         <h2 class = "name">Name: ${el.name}</h2>
         <p class= "population">Population: ${el.population}</p>
         <p class = "capital">Capital: ${el.capital}</p>
@@ -24,9 +38,15 @@ function renderCountryCard(country) {
           ', '
         )}</p>
         </div>`;
-    })
-    .join('');
-  refs.countryInfo.insertAdjacentHTML('afterbegin', markUp);
+      })
+      .join('');
+    refs.countryInfo.insertAdjacentHTML('afterbegin', markUp);
+  }
+  if (country.lenght > 10) {
+    Notiflix.Notify.info(
+      'Too many matches found. Please enter a more specific name.'
+    );
+  }
 }
 
 refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
@@ -34,8 +54,8 @@ refs.searchForm.addEventListener('input', debounce(onSearch, DEBOUNCE_DELAY));
 function onSearch(evt) {
   evt.preventDefault();
   const countryDraft = evt.target.value;
-  const country = countryDraft.trim();
-  API.fetchCountry(country).then(renderCountryCard).catch(onFetchError);
+  const countryName = countryDraft.trim();
+  API.fetchCountry(countryName).then(renderCountryCard).catch(onFetchError);
 }
 
 function onFetchError(error) {
